@@ -1,0 +1,13 @@
+# The .gitignore is used as a whitelist
+
+# Blacklist everything
+*
+!*/
+
+#############
+# WHITELIST #
+#############
+
+!hypr/
+!ashell/
+

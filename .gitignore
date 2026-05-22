@@ -8,6 +8,6 @@
 # WHITELIST #
 #############
 
-!hypr/
-!ashell/
+!hypr/**
+!ashell/**
 

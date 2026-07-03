@@ -1,9 +1,9 @@
 --------------------
 -- DARK THEME ### --
 --------------------
-hl.env("GTK_THEME", "Adwaita")            -- for GTK3 apps
-hl.env("GTK_COLOR_SCHEME", "prefer-dark") -- for GTK4 apps
-hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")   -- for Qt apps
+hl.env("GTK_THEME", "adw-gtk3")               -- for GTK3 apps
+hl.env("GTK_COLOR_SCHEME", "prefer-dark")     -- for GTK4 apps
+hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")       -- for Qt apps
 
 hl.env("STEAM_FORCE_DESKTOPUI_SCALING", 1.25) -- HiDPI for Steam
 
@@ -50,7 +50,8 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("hyprlauncher -d")
 	hl.exec_cmd("hypridle")
 	hl.exec_cmd("wl-paste --watch cliphist store")
-	hl.exec_cmd(("awww-daemon"))
+	-- hl.exec_cmd(("awww-daemon"))
+	hl.exec_cmd(("pano-scrobbler --minimized"))
 end)
 
 
@@ -187,7 +188,7 @@ hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("kitty " .. tuiFileManager))
 hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd(guiFileManager))
 hl.bind(mainMod .. " + F", hl.dsp.window.float())
-hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("hyprlock"))
 
 -- Screenshot
@@ -220,9 +221,26 @@ hl.bind(mainMod .. " + SHIFT + 0", hl.dsp.window.move({
 	workspace = 10
 }))
 
--- Scroll through workspaces with mainMod + scroll
+-- Scroll through active (non-empty) workspaces with mainMod + scroll
 hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
+
+
+-- Scroll through workspaces (including empty ones) with mainMod + scroll
+hl.bind(mainMod .. " + SHIFT + mouse_down", hl.dsp.focus({ workspace = "+1" }))
+hl.bind(mainMod .. " + SHIFT + mouse_up", hl.dsp.focus({ workspace = "-1" }))
+
+
+-- Scroll through workspaces (including empty ones) with mainMod + [ ]
+hl.bind(mainMod .. " + bracketright", hl.dsp.focus({ workspace = "+1" }))
+hl.bind(mainMod .. " + bracketleft", hl.dsp.focus({ workspace = "-1" }))
+
+
+-- Move window to next/previous workspace with mainMod + SHIFT + [ ]
+hl.bind(mainMod .. " + SHIFT + bracketright", hl.dsp.window.move({ workspace = "+1" }))
+hl.bind(mainMod .. " + SHIFT + bracketleft", hl.dsp.window.move({ workspace = "-1" }))
+
+
 
 -- Move/resize windows with mainMod + LMB/RMB and dragging
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag())
@@ -232,11 +250,11 @@ hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize())
 hl.bind("XF86AudioRaiseVolume",
 	hl.dsp.exec_cmd(
 		"wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+; dunstify --replace-id 666 \"$(wpctl get-volume @DEFAULT_SINK@)\""),
-	{ locked = true })
+	{ locked = true, repeating = true })
 hl.bind("XF86AudioLowerVolume",
 	hl.dsp.exec_cmd(
 		"wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-; dunstify --replace-id 666 \"$(wpctl get-volume @DEFAULT_SINK@)\""),
-	{ locked = true })
+	{ locked = true, repeating = true })
 hl.bind("XF86AudioMute",
 	hl.dsp.exec_cmd(
 		"wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; dunstify --replace-id 666 \"$(wpctl get-volume @DEFAULT_SINK@)\""),
@@ -247,10 +265,10 @@ hl.bind("XF86AudioMicMute",
 	{ locked = true })
 hl.bind("XF86MonBrightnessUp",
 	hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+; dunstify --replace-id 667 \"Brightness: $(brightnessctl get)\""),
-	{ locked = true })
+	{ locked = true, repeating = true })
 hl.bind("XF86MonBrightnessDown",
 	hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-; dunstify --replace-id 667 \"Brightness: $(brightnessctl get)\""),
-	{ locked = true })
+	{ locked = true, repeating = true })
 
 -- Playerctl
 hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
